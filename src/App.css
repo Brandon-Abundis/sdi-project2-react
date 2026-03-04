@@ -99,6 +99,60 @@ button:focus-visible {
   gap: 1rem;
 }
 
+/* ______________________Game__________________________ */
+.game{
+  display: flex;
+  flex-direction: column;
+}
+.game-inner{
+  display: flex;
+  flex-direction: row;
+  gap: 20rem;
+}
+.game-inner-right{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.country-card{
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 18px;
+  background-color: rgba(45, 45, 45, 0.75);
+  background-blend-mode: darken;
+
+  transition: box-shadow 0.25s ease,
+  transform 0.25s ease,
+  background-color 0.25s ease;
+}
+.country-card:hover {
+  background: #42424281;
+  /* transform: translateY(-4px); */
+  transform: scale(1.04);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(16, 146, 185, 0.605);
+}
+.country-card button {
+  width: fit-content;
+}
+.country-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.game-inner-left{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.user-card {
+  display: flex;
+  flex-direction: column;
+}
+
 /* .logo {
   height: 6em;
   padding: 1.5em;

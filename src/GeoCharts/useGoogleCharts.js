@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 
 // this is needed so that both components stop fighting
+// used ai to help, as the documentation is like not amazing
 
 export default function useGoogleCharts() {
   const [ready, setReady] = useState(false);

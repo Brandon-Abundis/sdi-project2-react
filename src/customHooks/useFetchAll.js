@@ -16,7 +16,7 @@ export default function useFetchAll() {
 
       // fetch REST countries, very simple holy, fields is a faster fetch
       const restCountries = await fetch(
-        "https://restcountries.com/v3.1/all?fields=name,cca2,capital,region,subregion,population,area,flags,maps,gini"
+        "https://restcountries.com/v3.1/all?fields=name,cca2,capital,region,coatOfArms,population,area,flags,maps,gini"
       ).then(response => response.json());
 
       // remove countries with missing gini data, which is needed for logic
@@ -37,7 +37,7 @@ export default function useFetchAll() {
       for (const entry of gdpEntries) {
         // basically when i find the first entry, i assign it and keep skipping
         //  till i get to the next country
-        const match = filtered.find(country => country.cca2 === entry.country.id);
+        const match = filteredCountries.find(country => country.cca2 === entry.country.id);
         if (!match){ // actualy moving on from countries i filtered out
           continue; // skip
         }

@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import { GameContext } from '../App';
 
 export default function SelectionCard({countryData, setSelection}){
-  const { setCountryStats } = useContext(GameContext);
+  // const { setCountryStats } = useContext(GameContext);
 
   function handleSelection(selected){
     setSelection(selected)
