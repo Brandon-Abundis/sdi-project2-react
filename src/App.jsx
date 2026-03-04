@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Home from "./Start/Home";
 import Selection from "./Start/Selection";
+import Game from "./Game/Game";
 
 import useFetchAll from "./customHooks/useFetchAll";
 import "./App.css";
@@ -14,6 +15,7 @@ function App() {
   const [countryStats, setCountryStats] = useState(null);
   const [captured, setCaptured] = useState([]);
   const [allied, setAllied] = useState([]);
+  const [rounds, setRounds] = useState(0);
 
   const { countries } = useFetchAll();
   if(!countries) return <div>Loading Countries</div>
@@ -23,10 +25,12 @@ function App() {
       value={{countryStats, setCountryStats,
               captured, setCaptured,
               allied, setAllied,
+              rounds, setRounds,
               countries}}>
       <Routes>
         <Route path='/' element={<Home/>} />
-        <Route path='selection' element={<Selection/>} />
+        <Route path='/selection' element={<Selection/>} />
+        <Route path='/game/:round' element={<Game/>} />
       </Routes>
     </GameContext.Provider>
   );

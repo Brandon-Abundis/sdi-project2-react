@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { GameContext } from "../App";
 
@@ -7,6 +8,8 @@ import Selected from "./Selected";
 
 export default function Selection() {
   const { countries } = useContext(GameContext);
+
+  const navigate = useNavigate();
 
   const [randEntries, setRandEntries] = useState([]);
   const [currentSelection, setCurrentSelection] = useState(null);
@@ -31,6 +34,11 @@ export default function Selection() {
     setRandEntries(entries);
   }, [countries]);
 
+  function backHome(){
+    setCurrentSelection(null)
+    navigate('/')
+  }
+
   // SAFE: this return happens AFTER all hooks
   if (!countries || countries.length === 0) {
     return <h2>Loading...</h2>;
@@ -38,6 +46,7 @@ export default function Selection() {
   // console.log(currentSelection)
   return (
     <div className="selection">
+      <button onClick={() => backHome()}>🏠︎Home</button>
       <h2>Choose Your Country</h2>
 
       <div className="selection-area">
