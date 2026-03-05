@@ -120,7 +120,7 @@ button:focus-visible {
   flex-direction: column;
   padding: 1rem;
   border-radius: 18px;
-  background-color: rgba(45, 45, 45, 0.75);
+  background-color: rgba(45, 45, 45, 0.8);
   background-blend-mode: darken;
 
   transition: box-shadow 0.25s ease,
@@ -151,6 +151,27 @@ button:focus-visible {
 .user-card {
   display: flex;
   flex-direction: column;
+}
+
+
+.energy-bar {
+  width: 400px;
+  height: 22px;
+  background: #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.energy-fill {
+  height: 100%;
+  transition: width 0.4s ease, background-color 0.4s ease;
+}
+
+.energy-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
 }
 
 /* .logo {

@@ -11,11 +11,30 @@ export default function Selected({country}){
   const {setCountryStats, setRounds, rounds} = useContext(GameContext);
   const navigate = useNavigate();
 
-  function handleConfirmation(){
-    setCountryStats(country)
+  function handleConfirmation() {
+    const gini = country.gini[Object.keys(country.gini)[0]];
+
+    // Normalize Gini to 0–1
+    let giniNorm = 1 - (gini - 20) / 40;
+    giniNorm = Math.max(0, Math.min(1, giniNorm));
+
+    const energy = giniNorm;          // stable = high energy
+    const volatility = 1 - giniNorm;  // unstable = high volatility
+
+    const startingScore = Score(country);
+
+    setCountryStats({
+      ...country,
+      giniNorm,
+      energy,
+      volatility,
+      startingScore,
+    });
+
     setRounds(1);
-    navigate(`/game/round-${rounds}`)
+    navigate(`/game/round-${rounds}`);
   }
+
 
   return(
     <div className="selected">

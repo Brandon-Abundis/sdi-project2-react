@@ -6,7 +6,9 @@ export default function UserCard({countryStats}) {
 
   return(
     <div className="user-card">
-      <span>{countryStats.name.common}</span>
+
+      <span>{countryStats.name.common}{" score: "}{Score(countryStats)}</span>
+
       <img src={countryStats.coatOfArms.svg} alt={countryStats.flags.alt} style={{ width: "100%", height: "auto", maxHeight: "300px", objectFit: "contain" }}></img>
       <span>GPD: ${formatNumber(countryStats.gdp)}</span>
       <span>Population: {formatNumber(countryStats.population)}</span>

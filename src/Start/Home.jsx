@@ -5,7 +5,7 @@ export default function Home() {
 
   return(
     <div className="home">
-      <h2>Rouge Country</h2>
+      <h2>Country ahh game</h2>
       <button onClick={() => navigate('/selection')}>Start</button>
       <button>Stats</button>
       <button>World</button>

@@ -1,37 +1,43 @@
-function clamp01(x) {
-  return Math.max(0, Math.min(1, x));
-}
 // computeCountryScore
-export default function Score( country ) {
-  if (!country) return "Loading...";
+export default function Score(country) {
+  // function clamp01(x) {
+  //   return Math.max(0, Math.min(1, x));
+  // }
+  // const gdp = country.gdp;
+  // const population = country.population;
+  // const gini = country.gini[Object.keys(country.gini)[0]];
 
-  const gdp = country.gdp;
-  const population = country.population;
-  const gini = country.gini[Object.keys(country.gini)[0]]
+  // const gdpPerCap = gdp / population;
 
-  // if (!gdp || !population || !gini) return 0;
+  // // Wider, more realistic scaling
+  // const gdpPerCapScore = Math.log(gdpPerCap) ** 1.3;
+  // const gdpTotalScore = Math.log(gdp) ** 1.15;
+  // const popScore = Math.log(population) ** 1.1;
 
-  // GDP per capita (richness)
-  const gdpPerCap = gdp / population;
-  const gdpPerCapNorm = clamp01((Math.log10(gdpPerCap) - 3) / 2);
+  // // Gini penalty (simple)
+  // const giniScore = (60 - gini);
 
-  // Total GDP (economic weight)
-  const gdpTotalNorm = clamp01((Math.log10(gdp) - 10) / 3);
+  // const raw =
+  //   0.35 * gdpPerCapScore +
+  //   0.40 * gdpTotalScore +
+  //   0.20 * popScore +
+  //   0.05 * giniScore;
 
-  // Population (size)
-  const popNorm = clamp01((Math.log10(population) - 6) / 3);
+  // // Much larger scale
+  // return Math.round(raw * 200);
+  const gdp = country.gdp;                 // e.g. 113,000,000,000
+  const population = country.population;   // e.g. 6,400,000
+  const gini = country.gini[Object.keys(country.gini)[0]];
 
-  // Gini (inequality penalty)
-  let giniNorm = 1 - (gini - 20) / 40;
-  giniNorm = clamp01(giniNorm);
+  const gdpBillions = gdp / 1_000_000_000;        // 113.3
+  const gdpPerCap = gdp / population;             // ~17,700
+  const popMillions = population / 1_000_000;     // 6.4
 
-  // Weighted score
   const raw =
-    0.35 * gdpPerCapNorm +
-    0.35 * gdpTotalNorm +
-    0.2  * popNorm +
-    0.1  * giniNorm;
+      0.50 * gdpBillions +               // linear GDP
+      0.30 * (gdpPerCap / 1000) +        // linear GDP per capita
+      0.15 * Math.sqrt(popMillions) +    // sqrt population
+      0.05 * (60 - gini);                // inequality bonus
 
-  // Scale to 0–3000
-  return Math.round(raw * 3000);
+  return Math.round(raw * 100);
 }
