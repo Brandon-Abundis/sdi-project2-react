@@ -58,7 +58,6 @@ export default function Game() {
               key={index}
               country={country}
               setResult={setResult}
-              setCountryStats={setCountryStats}
               nextRound={() => setRounds(r => r+1)} // will force referesh from dependency array
               />
           ))}

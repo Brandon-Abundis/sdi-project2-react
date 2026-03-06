@@ -1,4 +1,6 @@
-export default function computeFinalProbability(userScore, botScore, energy, volatility) {
+import Score from "./score";
+
+export default function computeFinalProbability(userStats, botStats) {
   function getEnergyMultiplier(energy) {
     if (energy < 0.01) return 0.001;
     if (energy < 0.15) return 0.01; //.6
@@ -8,8 +10,10 @@ export default function computeFinalProbability(userScore, botScore, energy, vol
     if (energy < 0.90) return 1.55;
     return 1.70;
   }
+  const userScore = Score(userStats);
+  const botScore = Score(botStats);
 
-  const multiplier = getEnergyMultiplier(energy);
+  const multiplier = getEnergyMultiplier(userStats.energy);
   const boostedUserScore = userScore * multiplier;
 
   // Balanced exponent
@@ -26,11 +30,11 @@ export default function computeFinalProbability(userScore, botScore, energy, vol
     peerBonus = 0.08; // +8% success
   }
 
-  // Stability boost
-  const stabilityBoost = 0.18 * energy;
+  // Stability boost, incentive to grow energy to a responsible amount
+  const stabilityBoost = 0.18 * userStats.energy;
 
   // Volatility swing
-  const swing = (Math.random() * 2 - 1) * volatility * 0.15;
+  const swing = (Math.random() * 2 - 1) * userStats.volatility * 0.15;
 
   // Used for displaying win chance, converted in game component to fail rate
   let finalProb = baseProb + peerBonus + stabilityBoost + swing;
