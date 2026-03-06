@@ -16,6 +16,7 @@ export default function Game() {
     countries} = useContext(GameContext);
 
     const [entries, setEntries] = useState([]);
+    const [result, setResult] = useState("none")
 
     useEffect(() => {
       if(countries.length > 0) {
@@ -41,6 +42,7 @@ export default function Game() {
   return(
     <div className="game">
       <h2>Round: {rounds}</h2>
+      <span>Result: {result} </span>
 
       <EnergyBar countryStats={countryStats} />
       <button style={{width:'fit-content'}} onClick={() => handleConsolidate()}> Consolidate </button>
@@ -52,7 +54,13 @@ export default function Game() {
 
         <div className="game-inner-right">
           {entries.map((country, index) => (
-            <CountryCard key={index} country={country}/>
+            <CountryCard
+              key={index}
+              country={country}
+              setResult={setResult}
+              setCountryStats={setCountryStats}
+              nextRound={() => setRounds(r => r+1)} // will force referesh from dependency array
+              />
           ))}
         </div>
       </div>

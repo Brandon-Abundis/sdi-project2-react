@@ -1,8 +1,9 @@
 export default function computeFinalProbability(userScore, botScore, energy, volatility) {
   function getEnergyMultiplier(energy) {
-    if (energy < 0.15) return 0.60;
-    if (energy < 0.30) return 0.80;
-    if (energy < 0.50) return 1.00;
+    if (energy < 0.01) return 0.001;
+    if (energy < 0.15) return 0.01; //.6
+    if (energy < 0.30) return 0.40; //.8
+    if (energy < 0.50) return .90; // 1
     if (energy < 0.75) return 1.35;
     if (energy < 0.90) return 1.55;
     return 1.70;
@@ -31,9 +32,19 @@ export default function computeFinalProbability(userScore, botScore, energy, vol
   // Volatility swing
   const swing = (Math.random() * 2 - 1) * volatility * 0.15;
 
+  // Used for displaying win chance, converted in game component to fail rate
   let finalProb = baseProb + peerBonus + stabilityBoost + swing;
+  finalProb = Math.max(0, Math.min(1, finalProb))
 
-  return Math.max(0, Math.min(1, finalProb));
+  // Determine actual win/lose result
+  const roll = Math.random();
+  const didWin = roll < finalProb; // if roll is less than win rate, false
+
+
+  return {
+    probability: finalProb,
+    result: didWin ? "win" : "loose",
+  }
 }
 
 
