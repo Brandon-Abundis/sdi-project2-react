@@ -1,32 +1,118 @@
-
-export default function handleResult(actualResult, type, setCountryStats, userStats){
+export default function handleResult(actualResult, type, setCountryStats, userStats, winChance, botStats, setRoundStats) {
 
   const attackRolls = {
-      win:[-0.2,-0.3],
-      lose:[-0.35,-0.45]
-    };
+    win: {
+      energy: [-0.2, -0.3],
+      giniRate: [2, 3], // attacking increases Gini (bad)
+      populationGain: userStats.population * .1, // 10% gain
+      gdpGain: botStats.gdp * .15, // 15% gain
+    },
+    loss: { // high penalty for losing
+      energy: [-0.35, -0.45],
+      giniRate: [2.5, 3.5],
+      populationLoss: [userStats.population * .05, userStats.population * .067],
+      gdpLoss: [userStats.gdp * .08, userStats.gdp * .10],
+    }
+  }
+
   const negotiateRolls = {
-    win:[-0.1,-0.15],
-    lose:[-0.2,-0.3]
+    win: {
+      energy: [-0.1, -0.15],
+      giniRate: [-3.75, -5.5],
+      populationGain: botStats.population * .03, // 3% gain
+      gdpGain: botStats.population * .1, // 10% allied contribution  <-- FIXED
+    },
+    loss: { // <-- FIXED: was "lose"
+      energy: [-0.2, -0.3],
+      giniRate: [0.5, 0.7],
+      populationLoss: [userStats.population * .0003, userStats.population * .0005],
+      gdpLoss: [userStats.gdp * .01, userStats.gdp * .02], // <-- FIXED
+    }
   };
 
-  let Win;
-  let Lose;
+  const prevPopulation = userStats.population;
+  const prevGDP = userStats.gdp;
 
-  const typeOfRoll = type == 'attack' ? attackRolls : negotiateRolls;
-  const normalEnergyLose = Math.random() < 0.7;
+  // checking what kind of roll was made
+  const typeOfRoll = type === 'attack' ? attackRolls : negotiateRolls;
 
-  Win = normalEnergyLose ? typeOfRoll.win[0] : typeOfRoll.win[1];
-  Lose = normalEnergyLose ? typeOfRoll.lose[0] : typeOfRoll.lose[1];
+  // Risk multiplier based on probability
+  const loseChance = 1 - (winChance ?? 0.5); // <-- prevents NaN if winChance missing
+  const riskMultiplier = 1 + loseChance; // 1.0–2.0 range
 
-  const delta = actualResult == 'win' ? Win : Lose;
-  // forces value to be between 0 - 100 visually '0-1'
-  const newEnergy = Math.max(0, Math.min(1, userStats.energy + delta));
+  //________________________________random___________________________________________
+  // rolls begin to be calculated
+  // base rate of 70%
+  const normal = Math.random() < 0.7;
+
+  // Base rolls Energy
+  let winEnergy  = normal ? typeOfRoll.win.energy[0]  : typeOfRoll.win.energy[1];
+  let loseEnergy = normal ? typeOfRoll.loss.energy[0] : typeOfRoll.loss.energy[1];
+
+  // Base rolls Gini
+  let winGini  = normal ? typeOfRoll.win.giniRate[0]  : typeOfRoll.win.giniRate[1];
+  let loseGini = normal ? typeOfRoll.loss.giniRate[0] : typeOfRoll.loss.giniRate[1];
+
+  // Apply risk scaling
+  winEnergy  *= riskMultiplier;
+  loseEnergy *= riskMultiplier;
+  winGini    *= riskMultiplier;
+  loseGini   *= riskMultiplier;
+
+  const energyDelta = actualResult === 'win' ? winEnergy : loseEnergy;
+  const giniDelta   = actualResult === 'win' ? winGini  : loseGini;
+
+  const newEnergy = Math.max(0, Math.min(1, userStats.energy + energyDelta));
   const newVolatility = 1 - newEnergy;
+  //________________________________________________________________________________
 
-  setCountryStats({
-    ...userStats,
-    energy: newEnergy,
-    volatility: newVolatility,
+  //___________________________garenteed_if_won_____________________________________
+  let winPopulation = userStats.population + typeOfRoll.win.populationGain;
+  let winGDP        = userStats.gdp        + typeOfRoll.win.gdpGain;
+
+  let lossPopulationRate = normal ? typeOfRoll.loss.populationLoss[0] : typeOfRoll.loss.populationLoss[1];
+  let lossGDPRate        = normal ? typeOfRoll.loss.gdpLoss[0]        : typeOfRoll.loss.gdpLoss[1];
+
+  let lossPopulation = userStats.population - lossPopulationRate;
+  let lossGDP = userStats.gdp - lossGDPRate;
+  // winPopulation  *= riskMultiplier;
+  // lossPopulation *= riskMultiplier;
+  winGDP         *= riskMultiplier;
+  lossGDP        *= riskMultiplier;
+
+  const newPopulation = actualResult === 'win' ? winPopulation : lossPopulation;
+  const newGDP        = actualResult === 'win' ? winGDP        : lossGDP;
+
+  const populationDelta = newPopulation - prevPopulation;
+  const gdpDelta = newGDP - prevGDP;
+
+  setRoundStats({
+    result: actualResult,
+    prevPopulation,
+    newPopulation,
+    populationDelta,
+    prevGDP,
+    newGDP,
+    gdpDelta
   });
+
+
+
+  setCountryStats(prev => {
+    // Get the first (and only) key in the gini object
+    const giniKey = Object.keys(prev.gini)[0];
+    const currentGini = prev.gini[giniKey];
+
+    const newGini = Math.max(20, Math.min(60, currentGini + giniDelta));
+
+    return {
+      ...prev,
+      gdp: newGDP,
+      gini: { value: newGini },   // overwrite with clean format
+      energy: newEnergy,
+      population: newPopulation,
+      volatility: newVolatility
+    };
+  });
+
 }

@@ -7,20 +7,8 @@ import computeNegotiationProbability from '../HelperFunctions/probNegotiate'
 
 import { GameContext } from '../App'
 
-export default function CountryCard({country, setResult, nextRound}) { //setCountryStats
-  const { countryStats, setCountryStats } = useContext(GameContext);
-
-  // const userScore = score(countryStats);
-  // const botScore = score(country);
-  // const total = userScore + botScore;
-
-  // const userProbability = Math.round((userScore/total) * 100);
-  // const successProb  = userScore / total;            // success chance (0–1)
-  // const failureProbability = 1 - successProb;       // failure chance (0–1)
-  // const failurePercent = Math.round(failureProbability * 100); // 0–100
-
-  // const finalProb = computeFinalProbability(userScore, botScore, giniNorm);
-  // const failurePercent = Math.round((1 - finalProb) * 100);
+export default function CountryCard({country, setResult, nextRound, setRoundStats}) { //setCountryStats
+  const { countryStats, setCountryStats, setCaptured, setAllied, countries, setCountries } = useContext(GameContext);
 
   const successProbability = computeFinalProbability(countryStats, country);
   const negotiateProbability = computeNegotiationProbability(countryStats, country);
@@ -40,9 +28,33 @@ export default function CountryCard({country, setResult, nextRound}) { //setCoun
   const riskColorNegotiate = getRiskColor(negotiateFailPercent)
 
   function handleClick(actualResult, type){
-    handleResult(actualResult, type, setCountryStats, countryStats);
+    let winChance = type === 'attack'
+      ? successProbability.probability
+      : negotiateProbability.probability;
+
+    handleResult(actualResult, type, setCountryStats, countryStats, winChance, country, setRoundStats);
     setResult('');
     setResult(actualResult);
+    // 1. Add to captured or allied
+    if (type === 'attack' && actualResult === 'win') {
+      setCaptured(prev => [...prev, country]);
+    }
+
+    if (type === 'negotiate' && actualResult === 'win') {
+      setAllied(prev => [...prev, country]);
+    }
+
+    // 2. Remove from the main countries list
+    // const updated = countries.filter(c => c.cca3 !== country.cca3);
+    // setCountries(prev =>
+    //   prev.filter(c => c.cca3 !== country.cca3)
+    // );
+    setCountries(prev => {
+      const next = new Set(prev);
+      next.delete(country);
+      return [...next];
+    });
+    console.log(countries.length)
     nextRound(); // triggers useEffect dependency array to referesh
   }
 

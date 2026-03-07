@@ -47,7 +47,7 @@ export default function computeFinalProbability(userStats, botStats) {
 
   return {
     probability: finalProb,
-    result: didWin ? "win" : "loose",
+    result: didWin ? "win" : "fail",
   }
 }
 

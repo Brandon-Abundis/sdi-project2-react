@@ -17,7 +17,7 @@ function App() {
   const [allied, setAllied] = useState([]);
   const [rounds, setRounds] = useState(0);
 
-  const { countries } = useFetchAll();
+  const { countries, setCountries } = useFetchAll();
   if(!countries) return <div>Loading Countries</div>
 
   return (
@@ -26,7 +26,7 @@ function App() {
               captured, setCaptured,
               allied, setAllied,
               rounds, setRounds,
-              countries}}>
+              countries, setCountries}}>
       <Routes>
         <Route path='/' element={<Home/>} />
         <Route path='/selection' element={<Selection/>} />

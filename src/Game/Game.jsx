@@ -13,10 +13,11 @@ export default function Game() {
     captured, setCaptured,
     allied, setAllied,
     rounds, setRounds,
-    countries} = useContext(GameContext);
+    countries, setCountries} = useContext(GameContext);
 
     const [entries, setEntries] = useState([]);
     const [result, setResult] = useState("none")
+    const [roundStats, setRoundStats] = useState({});
 
     useEffect(() => {
       if(countries.length > 0) {
@@ -58,6 +59,7 @@ export default function Game() {
               key={index}
               country={country}
               setResult={setResult}
+              setRoundStats={setRoundStats}
               nextRound={() => setRounds(r => r+1)} // will force referesh from dependency array
               />
           ))}
