@@ -45,12 +45,37 @@ export default function Game() {
       <h2>Round: {rounds}</h2>
       <span>Result: {result} </span>
 
-      <EnergyBar countryStats={countryStats} />
-      <button style={{width:'fit-content'}} onClick={() => handleConsolidate()}> Consolidate </button>
 
       <div className="game-inner">
         <div className="game-inner-left">
-          <UserCard countryStats={countryStats}/>
+
+          <div className="captured-col">
+            {captured.map((cap, index) => (
+                <img src={cap.flags.svg}
+                alt={cap.name.common}
+                key={index} style={{width: "2rem", height: "auto", border:'1px solid rgba(247, 0, 0, 0.6)'}}
+                title={cap.name.common}></img>
+              ))}
+          </div>
+
+          <div className="game-user-bar">
+            <EnergyBar countryStats={countryStats} />
+            <button style={{width:'fit-content'}} onClick={() => handleConsolidate()}> Consolidate </button>
+
+            <UserCard countryStats={countryStats}/>
+          </div>
+
+          <div className="allied-col">
+            {allied.map((cap, index) => (
+                <img src={cap.flags.svg}
+                alt={cap.name.common}
+                key={index}
+                style={{width: "2rem", height: "auto", border:'1px solid rgba(0, 247, 54, 0.6)'}}
+                title={cap.name.common}></img>
+              ))}
+          </div>
+
+
         </div>
 
         <div className="game-inner-right">

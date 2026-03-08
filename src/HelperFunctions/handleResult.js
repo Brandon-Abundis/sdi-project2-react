@@ -3,9 +3,9 @@ export default function handleResult(actualResult, type, setCountryStats, userSt
   const attackRolls = {
     win: {
       energy: [-0.2, -0.3],
-      giniRate: [2, 3], // attacking increases Gini (bad)
+      giniRate: [5, 7], // attacking increases Gini (bad)
       populationGain: userStats.population * .1, // 10% gain
-      gdpGain: botStats.gdp * .15, // 15% gain
+      gdpGain: userStats.gdp * .10, // 15% gain
     },
     loss: { // high penalty for losing
       energy: [-0.35, -0.45],
@@ -20,7 +20,7 @@ export default function handleResult(actualResult, type, setCountryStats, userSt
       energy: [-0.1, -0.15],
       giniRate: [-3.75, -5.5],
       populationGain: botStats.population * .03, // 3% gain
-      gdpGain: botStats.population * .1, // 10% allied contribution  <-- FIXED
+      gdpGain: botStats.gdp * .7, // 10% allied contribution  <-- FIXED
     },
     loss: { // <-- FIXED: was "lose"
       energy: [-0.2, -0.3],

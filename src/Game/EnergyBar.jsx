@@ -15,7 +15,7 @@ export default function EnergyBar({countryStats}){
           }}
         />
       </div>
-      <span className="energy-label"> Energy:{countryStats.energy * 100} </span>
+      <span className="energy-label"> Stability: {Math.round(countryStats.energy * 100)} </span>
     </div>
   )
 }

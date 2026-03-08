@@ -49,6 +49,7 @@ export default function CountryCard({country, setResult, nextRound, setRoundStat
     // setCountries(prev =>
     //   prev.filter(c => c.cca3 !== country.cca3)
     // );
+    // O(1) of finding
     setCountries(prev => {
       const next = new Set(prev);
       next.delete(country);
@@ -80,7 +81,7 @@ export default function CountryCard({country, setResult, nextRound, setRoundStat
           style={{
             width: "100%",
             height: "auto",
-            maxHeight: "200px",
+            maxHeight: "170px",
             objectFit: "contain",
           }}
         />

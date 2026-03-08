@@ -145,17 +145,39 @@ button:focus-visible {
 
 .game-inner-left{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
 .user-card {
   display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+}
+.user-main{
+  display: flex;
   flex-direction: column;
+}
+.captured-col,
+.allied-col {
+  display: flex;
+  flex-direction: column;   /* horizontal main axis */
+  flex-wrap: wrap;       /* allows wrapping */
+  gap: 5px;
+  max-height: 500px;     /* optional: controls when wrapping happens */
+}
+
+.captured-col > *,
+.allied-col > * {
+  flex: 0 0 auto;        /* prevents stretching */
 }
 
 
+
 .energy-bar {
-  width: 400px;
+  width: 300px;
   height: 22px;
   background: #ddd;
   border-radius: 6px;
