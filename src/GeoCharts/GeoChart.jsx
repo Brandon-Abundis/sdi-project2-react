@@ -86,7 +86,7 @@ const GeoChart = ({refreshKey}) => {
       legend: "none",                   // hide legend
       colorAxis: {
         values: [50, 100, 150, 200],             // numeric scale
-        colors: ["#9f9e9e", "#449733", "#297ede", "#105702"], // gradient colors
+        colors: ["#9f9e9e", "#b70d0d", "#297ede", "#105702"], // gradient colors
       },
     };
 

@@ -128,16 +128,26 @@ button:focus-visible {
   background-color: rgba(45, 45, 45, 0.8);
   background-blend-mode: darken;
 
-  transition: box-shadow 0.25s ease,
+  /* transition: box-shadow 0.25s ease,
   transform 0.25s ease,
-  background-color 0.25s ease;
+  background-color 0.25s ease; */
 }
-.country-card:hover {
+/* Only when .hoverable is present */
+.country-card.hoverable:hover {
   background: #42424281;
   transform: scale(1.04);
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
   border: 1px solid rgba(16, 146, 185, 0.605);
 }
+/* .country-card:hover {
+  background: #42424281;
+  transform: scale(1.04);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(16, 146, 185, 0.605);
+} */
+
+
+
 .country-card button {
   width: fit-content;
 }
@@ -282,7 +292,7 @@ button:focus-visible {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.9);
   color: white;
   display: flex;
   flex-direction: column;
@@ -301,6 +311,37 @@ button:focus-visible {
   display: flex;
   flex-direction: column;
   gap: .5rem;
+}
+.end-top {
+  display: flex;
+  flex-direction: row;
+}
+.stats{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 3rem;
+}
+.stats-right{
+  display: flex;
+  flex-flow: column wrap;
+  max-height: 150px;
+  gap: 6px;
+}
+.stats-inner-right{
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
+}
+.end-top img{
+  height: 100px;
+  width: 100%;
+}
+.end-tab{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* align-items: center; */
 }
 
 

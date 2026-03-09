@@ -7,15 +7,57 @@ import { GameContext } from "../App"
 import Back from "../Start/Back"
 
 export default function EndOverlay() {
-  const {countryStats, allied, captured} = useContext(GameContext)
+  const {countryStats, allied, captured, rounds} = useContext(GameContext)
   const navigate = useNavigate();
+
+  function showMessage(){
+    if(rounds >= 67) {
+      return <h2>Hit max rounds of {rounds}</h2>
+    } else {
+      return <h2>Your Country Collapsed! GINI hit 60 points</h2>
+    }
+  }
+
+  //fastest way to do these calculations
+  const totalCaputuredPopulation = captured.reduce(
+    (sum, country) => sum + (country.population || 0 ),
+    0
+  )
+  const totalCapturedArea = captured.reduce(
+    (sum, country) => sum + (country.area),
+    0
+  )
 
   return(
     <div className="end-overlay">
       <div className="end-menu">
-        <div className="end-top">
+        <div className="end-tab">
           <Back/>
-          <h2>Your Country Collapsed!</h2>
+          {/* <h2>Your Country Collapsed! GINI hit 60 points</h2> */}
+          {showMessage()}
+
+        </div>
+
+        <div className="end-top">
+          <div className="stats">
+            <div className="stats-left">
+              <h3>{countryStats.name.official}</h3>
+              <img src={countryStats.flags.svg} alt={countryStats.name.common}></img>
+            </div>
+
+            <div className="stats-right">
+              <span>GDP: ${countryStats.gdp.toLocaleString()}</span>
+              <span>Population: {Math.round(countryStats.population).toLocaleString()}</span>
+              <span>Captured: {captured.length} countries</span>
+              <span>Allied: {captured.length} countries</span>
+              <span>Region: {countryStats.region}</span>
+              <div className="stats-inner-right">
+                <span>Total global population: {(Math.round(totalCaputuredPopulation) + Math.round(countryStats.population)).toLocaleString()} </span>
+                <span>Total captured global area: {(totalCapturedArea + countryStats.area).toLocaleString()} km²</span>
+
+              </div>
+            </div>
+          </div>
         </div>
         <GeoChart />
       </div>

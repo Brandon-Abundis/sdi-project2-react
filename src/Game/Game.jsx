@@ -36,6 +36,9 @@ export default function Game() {
     if (giniValue >= 60) {
       setShowEnd(true);
     }
+    if (rounds >= 67) {
+      setShowEnd(true);
+    }
   }, [countryStats]);
 
 
@@ -108,6 +111,7 @@ export default function Game() {
               setRoundStats={setRoundStats}
               nextRound={() => setRounds(r => r+1)} // will force referesh from dependency array
               setShowOverlay={setShowOverlay}
+              hoverEnabled={!showOverlay && !showEnd}
               />
           ))}
         </div>

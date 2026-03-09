@@ -7,7 +7,7 @@ import computeNegotiationProbability from '../HelperFunctions/probNegotiate'
 
 import { GameContext } from '../App'
 
-export default function CountryCard({country, setResult, nextRound, setRoundStats, setShowOverlay}) { //setCountryStats
+export default function CountryCard({country, setResult, nextRound, setRoundStats, setShowOverlay, hoverEnabled}) { //setCountryStats
   const { countryStats, setCountryStats, setCaptured, setAllied, countries, setCountries } = useContext(GameContext);
 
   const successProbability = computeFinalProbability(countryStats, country);
@@ -65,7 +65,7 @@ export default function CountryCard({country, setResult, nextRound, setRoundStat
 
 
   return(
-    <div className="country-card" style={{
+    <div className={`country-card ${hoverEnabled ? "hoverable" : ""}`} style={{
       backgroundImage: `url(${country.flags.svg})`,
       backgroundSize: 'cover',
     }}>
