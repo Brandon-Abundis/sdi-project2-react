@@ -8,7 +8,7 @@ import { GameContext } from "../App";
   ['US', 100, country.area]
   ]
 */
-const GeoChart = ({refreshKey}) => {
+const GeoChart = ({refreshKey, width, height}) => {
   const {countryStats, allied, captured, countries} = useContext(GameContext);
 
   const geoData = [
@@ -86,7 +86,7 @@ const GeoChart = ({refreshKey}) => {
       legend: "none",                   // hide legend
       colorAxis: {
         values: [50, 100, 150, 200],             // numeric scale
-        colors: ["#9f9e9e", "#b70d0d", "#297ede", "#105702"], // gradient colors
+        colors: ["#447149", "#b70d0d", "#297ede", "#105702"], // gradient colors
       },
     };
 
@@ -99,16 +99,25 @@ const GeoChart = ({refreshKey}) => {
   // - Google Charts becomes ready
   // - Your data changes
 
-  // 7. The container MUST have a height or Google throws "Missing height argument".
+  // The container MUST have a height or Google throws "Missing height argument".
   return (
-    <div>
+    <div
+      style={{
+        width: width || "100%",
+        height: height || "500px",
+      }}
+    >
       <div
         id="my-geo-chart"
         ref={chartRef}
-        style={{ width: "100%", height: "500px" }}
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
       />
     </div>
   );
+
 };
 
 export default GeoChart;

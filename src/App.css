@@ -39,9 +39,15 @@ button:focus-visible {
 }
 
 /* ______________________Home__________________________ */
-.home {
+.home{
+  width: 100%;
+}
+
+.home-menu {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
 }
 

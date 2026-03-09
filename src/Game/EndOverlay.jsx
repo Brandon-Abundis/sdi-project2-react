@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import GeoChart from "../GeoCharts/GeoChart"
 import { GameContext } from "../App"
 import Back from "../Start/Back"
+import Score from "../HelperFunctions/score"
 
 export default function EndOverlay() {
   const {countryStats, allied, captured, rounds} = useContext(GameContext)
@@ -52,6 +53,7 @@ export default function EndOverlay() {
               <span>Allied: {captured.length} countries</span>
               <span>Region: {countryStats.region}</span>
               <div className="stats-inner-right">
+                <span>Score: {Score(countryStats)}</span>
                 <span>Total global population: {(Math.round(totalCaputuredPopulation) + Math.round(countryStats.population)).toLocaleString()} </span>
                 <span>Total captured global area: {(totalCapturedArea + countryStats.area).toLocaleString()} km²</span>
 
