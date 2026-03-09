@@ -1,3 +1,22 @@
+# Run Instructions
+- Run the project from the root directory: `npm run dev`
+- The fetch will store api data to local storage
+
+# Game Instructions
+- how the home screen is supposed to look like:
+<img src="src/assets/Screenshot 2026-03-09 141719.png" width="500" />
+- Select your country from 3 random selections:
+<img src="src/assets/Screenshot 2026-03-09 141801.png" width="500" />
+- Everything is based on RNG
+- Low energy reduces your probability
+- Watch your GINI — hitting 60 ends the game
+<img src="src/assets/Screenshot 2026-03-09 141828.png" width="500" />
+<img src="src/assets/Screenshot 2026-03-09 141859.png" width="500" />
+- There are 67 rounds per game
+<img src="src/assets/Screenshot 2026-03-09 141920.png" width="500" />
+
+
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
