@@ -5,7 +5,7 @@ export default function handleResult(actualResult, type, setCountryStats, userSt
       energy: [-0.2, -0.3],
       giniRate: [5, 7], // attacking increases Gini (bad)
       populationGain: userStats.population * .1, // 10% gain
-      gdpGain: userStats.gdp * .10, // 15% gain
+      gdpGain: userStats.gdp * .05, // 5% gain
     },
     loss: { // high penalty for losing
       energy: [-0.35, -0.45],
@@ -20,7 +20,7 @@ export default function handleResult(actualResult, type, setCountryStats, userSt
       energy: [-0.1, -0.15],
       giniRate: [-3.75, -5.5],
       populationGain: botStats.population * .03, // 3% gain
-      gdpGain: botStats.gdp * .7, // 10% allied contribution  <-- FIXED
+      gdpGain: botStats.gdp * .03, // 3% allied contribution  <-- FIXED
     },
     loss: { // <-- FIXED: was "lose"
       energy: [-0.2, -0.3],
@@ -62,6 +62,12 @@ export default function handleResult(actualResult, type, setCountryStats, userSt
   const energyDelta = actualResult === 'win' ? winEnergy : loseEnergy;
   const giniDelta   = actualResult === 'win' ? winGini  : loseGini;
 
+  let adjustedDelta = energyDelta;
+    // If energy is full, ignore negative deltas
+  if (userStats.energy >= 1 && energyDelta < 0) {
+    adjustedDelta = 0;
+  }
+
   const newEnergy = Math.max(0, Math.min(1, userStats.energy + energyDelta));
   const newVolatility = 1 - newEnergy;
   //________________________________________________________________________________
@@ -74,11 +80,14 @@ export default function handleResult(actualResult, type, setCountryStats, userSt
   let lossGDPRate        = normal ? typeOfRoll.loss.gdpLoss[0]        : typeOfRoll.loss.gdpLoss[1];
 
   let lossPopulation = userStats.population - lossPopulationRate;
-  let lossGDP = userStats.gdp - lossGDPRate;
+
+  let scaledLossGDP = lossGDPRate * riskMultiplier;
+  let lossGDP = userStats.gdp - scaledLossGDP;
+
   // winPopulation  *= riskMultiplier;
   // lossPopulation *= riskMultiplier;
   winGDP         *= riskMultiplier;
-  lossGDP        *= riskMultiplier;
+  // lossGDP        *= riskMultiplier;
 
   const newPopulation = actualResult === 'win' ? winPopulation : lossPopulation;
   const newGDP        = actualResult === 'win' ? winGDP        : lossGDP;

@@ -5,6 +5,7 @@ import { GameContext } from "../App";
 import UserCard from "./UserCard";
 import CountryCard from "./CountryCard";
 import EnergyBar from "./EnergyBar";
+import Overlay from "./Overlay";
 
 import randCountries from "../HelperFunctions/randCountries";
 
@@ -18,6 +19,7 @@ export default function Game() {
     const [entries, setEntries] = useState([]);
     const [result, setResult] = useState("none")
     const [roundStats, setRoundStats] = useState({});
+    const [showOverlay, setShowOverlay] = useState(false);
 
     useEffect(() => {
       if(countries.length > 0) {
@@ -42,6 +44,10 @@ export default function Game() {
 
   return(
     <div className="game">
+      {showOverlay && (
+        <Overlay roundStats={roundStats} onClose={() => setShowOverlay(false)} />
+      )}
+
       <h2>Round: {rounds}</h2>
       <span>Result: {result} </span>
 
@@ -86,6 +92,7 @@ export default function Game() {
               setResult={setResult}
               setRoundStats={setRoundStats}
               nextRound={() => setRounds(r => r+1)} // will force referesh from dependency array
+              setShowOverlay={setShowOverlay}
               />
           ))}
         </div>

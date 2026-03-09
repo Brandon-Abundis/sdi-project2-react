@@ -7,7 +7,7 @@ import computeNegotiationProbability from '../HelperFunctions/probNegotiate'
 
 import { GameContext } from '../App'
 
-export default function CountryCard({country, setResult, nextRound, setRoundStats}) { //setCountryStats
+export default function CountryCard({country, setResult, nextRound, setRoundStats, setShowOverlay}) { //setCountryStats
   const { countryStats, setCountryStats, setCaptured, setAllied, countries, setCountries } = useContext(GameContext);
 
   const successProbability = computeFinalProbability(countryStats, country);
@@ -57,6 +57,7 @@ export default function CountryCard({country, setResult, nextRound, setRoundStat
     });
     console.log(countries.length)
     nextRound(); // triggers useEffect dependency array to referesh
+    setShowOverlay(true)
   }
 
   const coat = country.coatOfArms?.svg;
