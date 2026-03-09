@@ -17,7 +17,7 @@ export default function Overlay({roundStats, onClose}) {
       fontWeight: "bold"
     }
   }
-
+  // this is the ugliest div chain ive made, but needs to be done
   return(
     <div className="overlay">
       <div className="overlay-menu">

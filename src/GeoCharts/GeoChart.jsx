@@ -1,6 +1,9 @@
 import { useEffect, useRef, useContext } from "react";
 import useGoogleCharts from "./useGoogleCharts";
 
+
+// Required google ai to assist use its own thing,
+// google docs are trash and help for react on this is TRASH!!!!
 import { GameContext } from "../App";
 /* requires
   [
@@ -15,7 +18,7 @@ const GeoChart = ({refreshKey, width, height}) => {
     ["Country", "Value", { type: "string", role: "tooltip" }],
   ];
 
-  if (countryStats) {
+  if (countryStats) { // setting up the chart with all of the data
     // user country
     geoData.push([
       countryStats.cca2,
@@ -47,7 +50,7 @@ const GeoChart = ({refreshKey, width, height}) => {
       ]);
     });
 
-  } else {
+  } else { // used for main menu
     // no selected country → show all
     countries.forEach(country => {
       geoData.push([
@@ -61,12 +64,12 @@ const GeoChart = ({refreshKey, width, height}) => {
   }
 
 
-  // Reference to the DOM node where Google will draw the map.
-  // Google Charts draws directly into a real DOM element, so useRef is ideal.
+  // reference to the DOM node where Google will draw the map.
+  //  google Charts draws directly into a real DOM element, so useRef is ideal.
   const chartRef = useRef(null);
 
-  //Shared loader hook — ensures Google Charts is loaded ONCE globally.
-  //Both GeoChart and GeoRegion wait for this before drawing.
+  //shared loader hook — ensures Google Charts is loaded ONCE globally.
+  //both GeoChart and GeoRegion wait for this before drawing.
   const ready = useGoogleCharts();
 
   useEffect(() => {
@@ -75,34 +78,34 @@ const GeoChart = ({refreshKey, width, height}) => {
     if (!ready) return;
     if (!chartRef.current) return;
 
-    // Convert your array-of-arrays into a Google DataTable.
+    //convert your array-of-arrays into a Google DataTable.
     const data = window.google.visualization.arrayToDataTable(geoData);
 
-    // Chart styling + behavior configuration.
+    //chart styling + behavior configuration.
     const options = {
-      resolution: "countries",          // prevents province-level zoom issues
-      backgroundColor: "#242424",       // map background
-      datalessRegionColor: "#9f9e9e",   // color for countries not in your dataset
-      legend: "none",                   // hide legend
+      resolution: "countries",// prevents province-level zoom issues
+      backgroundColor: "#242424",// map background
+      datalessRegionColor: "#9f9e9e",// color for countries not in your dataset
+      legend: "none",// hide legend
       colorAxis: {
         values: [50, 100, 150, 200],             // numeric scale
         colors: ["#447149", "#b70d0d", "#297ede", "#105702"], // gradient colors
       },
     };
 
-    // Create the chart instance and draw it into the <div>.
+    // create the chart instance and draw it into the <div>.
     const chart = new window.google.visualization.GeoChart(chartRef.current);
     chart.draw(data, options);
 
   }, [ready, refreshKey, JSON.stringify(geoData)]); //forcing a referesh as much as possible
-  // Re-draw whenever:
+  // re-draw whenever:
   // - Google Charts becomes ready
   // - Your data changes
 
   // The container MUST have a height or Google throws "Missing height argument".
   return (
     <div
-      style={{
+      style={{ // needed to scale main menu to be bigger.
         width: width || "100%",
         height: height || "500px",
       }}
@@ -110,7 +113,7 @@ const GeoChart = ({refreshKey, width, height}) => {
       <div
         id="my-geo-chart"
         ref={chartRef}
-        style={{
+        style={{ // i literally don't remeber why this is here, but it breaks it
           width: "100%",
           height: "100%",
         }}

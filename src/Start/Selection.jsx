@@ -39,7 +39,7 @@ export default function Selection() {
     navigate('/')
   }
 
-  // SAFE: this return happens AFTER all hooks
+  // this return happens AFTER all hooks, conditional...
   if (!countries || countries.length === 0) {
     return <h2>Loading...</h2>;
   }

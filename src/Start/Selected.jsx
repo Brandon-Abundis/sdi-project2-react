@@ -15,12 +15,12 @@ export default function Selected({country}){
   function handleConfirmation() {
     const gini = country.gini[Object.keys(country.gini)[0]];
 
-    // Normalize Gini to 0–1
+    // Normalize Gini to 0–1, then multiply to 100
     let giniNorm = 1 - (gini - 20) / 40;
     giniNorm = Math.max(0, Math.min(1, giniNorm));
 
-    const energy = giniNorm;          // stable = high energy
-    const volatility = 1 - giniNorm;  // unstable = high volatility
+    const energy = giniNorm;// stable = high energy
+    const volatility = 1 - giniNorm;// unstable = high volatility
 
     const startingScore = Score(country);
 

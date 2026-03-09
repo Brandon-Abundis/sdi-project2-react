@@ -16,31 +16,32 @@ export default function computeFinalProbability(userStats, botStats) {
   const multiplier = getEnergyMultiplier(userStats.energy);
   const boostedUserScore = userScore * multiplier;
 
-  // Balanced exponent
+  // exponent possibly balanced
   const alpha = 2.0;
   const userPower = Math.pow(boostedUserScore, alpha);
   const botPower = Math.pow(botScore, alpha);
 
   let baseProb = userPower / (userPower + botPower);
 
-  // Peer bonus (only helps against similar-strength countries)
+  // *bonus (only helps against similar-strength countries)
+  // literally just to make the game easier bec prob was too low.
   const ratio = userScore / botScore;
   let peerBonus = 0;
   if (ratio > 0.7 && ratio < 1.3) {
     peerBonus = 0.08; // +8% success
   }
 
-  // Stability boost, incentive to grow energy to a responsible amount
+  // stability boost, incentive to grow energy to a responsible amount
   const stabilityBoost = 0.18 * userStats.energy;
 
-  // Volatility swing
+  //volatility swing
   const swing = (Math.random() * 2 - 1) * userStats.volatility * 0.15;
 
-  // Used for displaying win chance, converted in game component to fail rate
+  //used for displaying win chance, converted in game component to fail rate
   let finalProb = baseProb + peerBonus + stabilityBoost + swing;
   finalProb = Math.max(0, Math.min(1, finalProb))
 
-  // Determine actual win/lose result
+  //determine actual win/lose result
   const roll = Math.random();
   const didWin = roll < finalProb; // if roll is less than win rate, false
 

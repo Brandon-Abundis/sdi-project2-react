@@ -20,13 +20,13 @@ export default function handleResult(actualResult, type, setCountryStats, userSt
       energy: [-0.1, -0.15],
       giniRate: [-3.75, -5.5],
       populationGain: botStats.population * .03, // 3% gain
-      gdpGain: botStats.gdp * .03, // 3% allied contribution  <-- FIXED
+      gdpGain: botStats.gdp * .03, // 3% allied contribution
     },
-    loss: { // <-- FIXED: was "lose"
+    loss: {
       energy: [-0.2, -0.3],
       giniRate: [0.5, 0.7],
       populationLoss: [userStats.population * .0003, userStats.population * .0005],
-      gdpLoss: [userStats.gdp * .01, userStats.gdp * .02], // <-- FIXED
+      gdpLoss: [userStats.gdp * .01, userStats.gdp * .02],
     }
   };
 
@@ -106,7 +106,8 @@ export default function handleResult(actualResult, type, setCountryStats, userSt
   });
 
 
-
+  // had to do this bec the mf gini is in a object with random key names
+  // getting prevoius and re-naming it to value to find faster.
   setCountryStats(prev => {
     // Get the first (and only) key in the gini object
     const giniKey = Object.keys(prev.gini)[0];
@@ -117,7 +118,7 @@ export default function handleResult(actualResult, type, setCountryStats, userSt
     return {
       ...prev,
       gdp: newGDP,
-      gini: { value: newGini },   // overwrite with clean format
+      gini: { value: newGini },// overwrite object holy f
       energy: newEnergy,
       population: newPopulation,
       volatility: newVolatility

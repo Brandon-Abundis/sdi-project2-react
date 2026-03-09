@@ -1,5 +1,6 @@
 // computeCountryScore
 export default function Score(country) {
+  // SAVE THIS JUST IN CASE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // function clamp01(x) {
   //   return Math.max(0, Math.min(1, x));
   // }
@@ -25,19 +26,19 @@ export default function Score(country) {
 
   // // Much larger scale
   // return Math.round(raw * 200);
-  const gdp = country.gdp;                 // e.g. 113,000,000,000
-  const population = country.population;   // e.g. 6,400,000
+  const gdp = country.gdp;
+  const population = country.population;
   const gini = country.gini[Object.keys(country.gini)[0]];
 
-  const gdpBillions = gdp / 1_000_000_000;        // 113.3
-  const gdpPerCap = gdp / population;             // ~17,700
-  const popMillions = population / 1_000_000;     // 6.4
+  const gdpBillions = gdp / 1_000_000_000;
+  const gdpPerCap = gdp / population;
+  const popMillions = population / 1_000_000;
 
   const raw =
-      0.50 * gdpBillions +               // linear GDP
-      0.30 * (gdpPerCap / 1000) +        // linear GDP per capita
-      0.15 * Math.sqrt(popMillions) +    // sqrt population
-      0.05 * (60 - gini);                // inequality bonus
+      0.50 * gdpBillions +// GDP
+      0.30 * (gdpPerCap / 1000) +// GDP per capita
+      0.15 * Math.sqrt(popMillions) + // sqrt population
+      0.05 * (60 - gini);//inequality bonus
 
   return Math.round(raw * 100);
 }

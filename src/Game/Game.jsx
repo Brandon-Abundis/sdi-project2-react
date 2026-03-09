@@ -53,7 +53,7 @@ export default function Game() {
       energy: newEnergy,
       volatility: newVolatility,
     });
-    setRounds(rounds + 1); // rest counts as a round imo
+    setRounds(rounds + 1);// rest counts as a round imo
   }
 
   return(
@@ -109,7 +109,7 @@ export default function Game() {
               country={country}
               setResult={setResult}
               setRoundStats={setRoundStats}
-              nextRound={() => setRounds(r => r+1)} // will force referesh from dependency array
+              nextRound={() => setRounds(r => r+1)}// will force referesh from dependency array
               setShowOverlay={setShowOverlay}
               hoverEnabled={!showOverlay && !showEnd}
               />

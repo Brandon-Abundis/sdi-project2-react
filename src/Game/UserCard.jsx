@@ -10,18 +10,18 @@ import getGiniBackgroundStyle from "../HelperFunctions/getGiniBackgroundStyle"
 export default function UserCard({countryStats}) {
   const { captured, allied} = useContext(GameContext);
 
-  function getGiniWarningStyle(gini) {
-    if (gini < 30) {
-      return { color: "lightblue" };
-    }
-    if (gini < 40) {
-      return { color: "green" };
-    }
-    if (gini < 50) {
-      return { color: "yellow" };
-    }
-    return { color: "red" };
-  }
+  // function getGiniWarningStyle(gini) {
+  //   if (gini < 30) {
+  //     return { color: "lightblue" };
+  //   }
+  //   if (gini < 40) {
+  //     return { color: "green" };
+  //   }
+  //   if (gini < 50) {
+  //     return { color: "yellow" };
+  //   }
+  //   return { color: "red" };
+  // }
 
 
   return(

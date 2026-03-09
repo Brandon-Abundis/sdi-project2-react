@@ -6,7 +6,7 @@ export default function computeNegotiationProbability(userStats, botStats) {
   const userGini = userStats.gini[Object.keys(userStats.gini)[0]];
   const botGini = botStats.gini[Object.keys(botStats.gini)[0]];
 
-  // Score leverage, even with low gini if your strong countries still want to be friend
+  //score leverage, even with low gini if your strong countries still want to be friend
   const scoreRatio = userScore / botScore;
   let leverage = 0;
 
@@ -17,11 +17,11 @@ export default function computeNegotiationProbability(userStats, botStats) {
     leverage = Math.max(-0.25, (scoreRatio - 1) * 0.20);
   }
 
-  // Gini stability, countries don't want to deal with poor and unstable
+  //gini stability, countries don't want to deal with poor and unstable
   const giniDiff = botGini - userGini; //positive - more stable
   const giniBonus = giniDiff * 0.003; //small buff bec math sucks at 0
 
-  //Energy factor
+  //energy factor
   let energyBonus = 0;
   if (userStats.energy < 0.05) {
     energyBonus = -0.50; // %50 penalty
@@ -40,10 +40,10 @@ export default function computeNegotiationProbability(userStats, botStats) {
   // Base chance 55% baseline chance
   let finalProb = 0.55 + leverage + giniBonus + energyBonus + gdpBonus;
 
-  //Clamp
+  //clamp to avoid any math issues
   finalProb = Math.max(0.01, Math.min(0.95, finalProb));
 
-  // This is where gambling is fun
+  // This is where gambling is fun!
   const didSucceed = Math.random() < finalProb;
 
   return {
