@@ -6,6 +6,8 @@ import UserCard from "./UserCard";
 import CountryCard from "./CountryCard";
 import EnergyBar from "./EnergyBar";
 import Overlay from "./Overlay";
+import Back from "../Start/Back";
+import EndOverlay from "./EndOverlay";
 
 import randCountries from "../HelperFunctions/randCountries";
 
@@ -20,6 +22,7 @@ export default function Game() {
     const [result, setResult] = useState("none")
     const [roundStats, setRoundStats] = useState({});
     const [showOverlay, setShowOverlay] = useState(false);
+    const [showEnd, setShowEnd] = useState(false);
 
     useEffect(() => {
       if(countries.length > 0) {
@@ -27,6 +30,14 @@ export default function Game() {
     }
   }, [rounds, countries])
   // const entries = randCountries(countries);
+
+  useEffect(() => {
+    const giniValue = countryStats.gini[Object.keys(countryStats.gini)[0]];
+    if (giniValue >= 60) {
+      setShowEnd(true);
+    }
+  }, [countryStats]);
+
 
   function handleConsolidate() {
     const isGood = Math.random() < 0.7; // making the game random asf
@@ -47,11 +58,15 @@ export default function Game() {
       {showOverlay && (
         <Overlay roundStats={roundStats} onClose={() => setShowOverlay(false)} />
       )}
+      {showEnd && (
+        <EndOverlay onClose={() => setShowEnd(false)} />
+      )}
 
-      <h2>Round: {rounds}</h2>
-      <span>Result: {result} </span>
+      <Back/>
 
 
+          <h2>Round: {rounds}</h2>
+          <span>Result: {result} </span>
       <div className="game-inner">
         <div className="game-inner-left">
 

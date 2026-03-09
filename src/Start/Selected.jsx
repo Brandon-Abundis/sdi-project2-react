@@ -8,8 +8,9 @@ import { useContext } from "react"
 import { useNavigate } from "react-router-dom"
 
 export default function Selected({country}){
-  const {setCountryStats, setRounds, rounds} = useContext(GameContext);
+  const {setCountryStats, setRounds, rounds, countries, setCountries} = useContext(GameContext);
   const navigate = useNavigate();
+
 
   function handleConfirmation() {
     const gini = country.gini[Object.keys(country.gini)[0]];
@@ -31,8 +32,16 @@ export default function Selected({country}){
       startingScore,
     });
 
-    setRounds(1);
-    navigate(`/game/round-${rounds}`);
+    // O(n)
+    setCountries(prev =>
+      prev.filter(c => c.cca2 !== country.cca2)
+    );
+
+
+    const nextRound = 1;
+    setRounds(nextRound);
+    navigate(`/game/round-${nextRound}`);
+
   }
 
 

@@ -1,49 +1,100 @@
-import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useContext } from "react";
 import useGoogleCharts from "./useGoogleCharts";
 
-
+import { GameContext } from "../App";
 /* requires
   [
   ['Country', 'Value', {role: 'tooltip'}]
   ['US', 100, country.area]
   ]
 */
-const GeoChart = ({ conqueredChartData }) => {
-  // 1. Reference to the DOM node where Google will draw the map.
+const GeoChart = ({refreshKey}) => {
+  const {countryStats, allied, captured, countries} = useContext(GameContext);
+
+  const geoData = [
+    ["Country", "Value", { type: "string", role: "tooltip" }],
+  ];
+
+  if (countryStats) {
+    // user country
+    geoData.push([
+      countryStats.cca2,
+      100,
+      `Population: ${countryStats.population.toLocaleString()}
+      GDP: $${countryStats.gdp.toLocaleString()}
+      Area: ${countryStats.area.toLocaleString()} km²`
+    ]);
+
+    // allied countries
+    allied.forEach(alliedCountry => {
+      geoData.push([
+        alliedCountry.cca2,
+        150,
+        `Allied - Population: ${alliedCountry.population.toLocaleString()}
+        GDP: $${alliedCountry.gdp.toLocaleString()}
+        Area: ${alliedCountry.area.toLocaleString()} km²`
+      ]);
+    });
+
+    // captured countries
+    captured.forEach(capturedCountry => {
+      geoData.push([
+        capturedCountry.cca2,
+        200,
+        `Captured - Population: ${capturedCountry.population.toLocaleString()}
+        GDP: $${capturedCountry.gdp.toLocaleString()}
+        Area: ${capturedCountry.area.toLocaleString()} km²`
+      ]);
+    });
+
+  } else {
+    // no selected country → show all
+    countries.forEach(country => {
+      geoData.push([
+        country.cca2,
+        50,
+        `Population: ${country.population.toLocaleString()}
+        GDP: $${country.gdp.toLocaleString()}
+        Area: ${country.area.toLocaleString()} km²`
+      ]);
+    });
+  }
+
+
+  // Reference to the DOM node where Google will draw the map.
   // Google Charts draws directly into a real DOM element, so useRef is ideal.
   const chartRef = useRef(null);
-  const navigate = useNavigate();
 
-  // 2. Shared loader hook — ensures Google Charts is loaded ONCE globally.
+  //Shared loader hook — ensures Google Charts is loaded ONCE globally.
   //Both GeoChart and GeoRegion wait for this before drawing.
   const ready = useGoogleCharts();
 
   useEffect(() => {
-    // 3. If Google Charts isn't ready yet, do nothing.
+    //If Google Charts isn't ready yet, do nothing.
     //This prevents the "Missing height argument" race condition.
     if (!ready) return;
+    if (!chartRef.current) return;
 
-    // 4. Convert your array-of-arrays into a Google DataTable.
-    const data = window.google.visualization.arrayToDataTable(conqueredChartData);
+    // Convert your array-of-arrays into a Google DataTable.
+    const data = window.google.visualization.arrayToDataTable(geoData);
 
-    // 5. Chart styling + behavior configuration.
+    // Chart styling + behavior configuration.
     const options = {
       resolution: "countries",          // prevents province-level zoom issues
       backgroundColor: "#242424",       // map background
       datalessRegionColor: "#9f9e9e",   // color for countries not in your dataset
       legend: "none",                   // hide legend
       colorAxis: {
-        values: [100, 200],             // numeric scale
-        colors: ["#297ede", "#449733"], // gradient colors
+        values: [50, 100, 150, 200],             // numeric scale
+        colors: ["#9f9e9e", "#449733", "#297ede", "#105702"], // gradient colors
       },
     };
 
-    // 6. Create the chart instance and draw it into the <div>.
+    // Create the chart instance and draw it into the <div>.
     const chart = new window.google.visualization.GeoChart(chartRef.current);
     chart.draw(data, options);
 
-  }, [ready, conqueredChartData]);
+  }, [ready, refreshKey, JSON.stringify(geoData)]); //forcing a referesh as much as possible
   // Re-draw whenever:
   // - Google Charts becomes ready
   // - Your data changes
@@ -51,11 +102,10 @@ const GeoChart = ({ conqueredChartData }) => {
   // 7. The container MUST have a height or Google throws "Missing height argument".
   return (
     <div>
-      <button onClick={() => navigate('/')}>Home</button>
       <div
         id="my-geo-chart"
         ref={chartRef}
-        style={{ width: "500px", height: "420px" }}
+        style={{ width: "100%", height: "500px" }}
       />
     </div>
   );

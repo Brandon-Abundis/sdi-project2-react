@@ -44,17 +44,16 @@ export default function CountryCard({country, setResult, nextRound, setRoundStat
       setAllied(prev => [...prev, country]);
     }
 
-    // 2. Remove from the main countries list
+    //Remove from the main countries list
     // const updated = countries.filter(c => c.cca3 !== country.cca3);
     // setCountries(prev =>
     //   prev.filter(c => c.cca3 !== country.cca3)
     // );
-    // O(1) of finding
-    setCountries(prev => {
-      const next = new Set(prev);
-      next.delete(country);
-      return [...next];
-    });
+    // O(n) of finding
+    setCountries(prev =>
+      prev.filter(c => c.cca2 !== country.cca2)
+    );
+
     console.log(countries.length)
     nextRound(); // triggers useEffect dependency array to referesh
     setShowOverlay(true)
