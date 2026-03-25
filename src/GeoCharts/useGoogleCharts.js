@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 // this is needed so that both components stop fighting
-// used goog ai to help, as the documentation is like not amazing
+// used google ai to help, as the documentation is like not amazing
 // without this react catches on fire.
 export default function useGoogleCharts() {
   const [ready, setReady] = useState(false);
